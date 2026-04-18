@@ -7,7 +7,10 @@ import hashlib
 import httpx
 import typing as t
 
+from .device import Device
 from .exceptions import APIError
+from .device_data import DeviceData
+from .station import Station
 
 JSON = t.Any
 Headers = t.Dict[str, str]
@@ -53,6 +56,10 @@ class PionPowerAPIClient:
             timeout=self.timeout,
             verify=self.verify,
         )
+
+    async def close(self) -> None:
+        """Close the underlying HTTP client."""
+        await self._client.aclose()
 
     async def login(
         self,
@@ -108,7 +115,7 @@ class PionPowerAPIClient:
         self._client.headers["token"] = token
         return True
 
-    async def get_realtime_data_by_device_code(self, device_code: str) -> JSON:
+    async def get_realtime_data_by_device_code(self, device_code: str) -> list[DeviceData]:
         """Fetch real-time device data by device code.
 
         Sends a POST request to "/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
@@ -124,17 +131,28 @@ class PionPowerAPIClient:
         Raises:
             APIError: When the response is not valid JSON or the request fails.
         """
-        response = await self.__post(
-            "/APPInterfaceServer/RealData/GetRealDataByDeviceCode",
-            json={"DeviceCode": device_code}
-        )
+        response = await self.__post("/APPInterfaceServer/RealData/GetRealDataByDeviceCode", json={"DeviceCode": device_code})
         if not isinstance(response, dict):
             raise APIError("Response is not valid JSON.")
-        return response
+        if (response["Code"] != 1) or (not isinstance(response["Data"], dict)):
+            raise APIError(f"API call failed: {response["Msg"]}")
+        return [DeviceData.from_dict(device) for device in response["Data"].values() if isinstance(device, dict)]
 
-    async def close(self) -> None:
-        """Close the underlying HTTP client."""
-        await self._client.aclose()
+    async def get_realtime_station_device_data(self, station_code: str) -> list[Device]:
+        response = await self.__post("/ToCWebInterfaceServer/Real/GetStationDeviceReals", json={"StationCode": station_code})
+        if not isinstance(response, dict):
+            raise APIError("Response is not valid JSON.")
+        if (response["Code"] != 1) or (not isinstance(response["Data"]["DeviceReals"], list)):
+            raise APIError(f"API call failed: {response["Msg"]}")
+        return [Device.from_dict(device, self) for device in response["Data"]["DeviceReals"] if isinstance(device, dict)]
+
+    async def get_station_list(self) -> list[Station]:
+        response = await self.__post("/AppInterfaceServer/Config/GetStationList", json={})
+        if not isinstance(response, dict):
+            raise APIError("Response is not valid JSON.")
+        if (response["Code"] != 1) or (not isinstance(response["Data"], list)):
+            raise APIError(f"API call failed: {response["Msg"]}")
+        return [Station.from_dict(station, self) for station in response["Data"] if isinstance(station, dict)]
 
     async def __get(
         self,

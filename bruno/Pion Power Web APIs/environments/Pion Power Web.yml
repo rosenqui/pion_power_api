@@ -1,0 +1,4 @@
+name: Pion Power Web
+variables:
+  - name: base_url
+    value: https://evcharger.pionpower.ca/hems

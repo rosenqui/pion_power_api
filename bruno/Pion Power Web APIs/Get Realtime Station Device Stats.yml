@@ -1,0 +1,37 @@
+info:
+  name: Get Realtime Station Device Stats
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{base_url}}/ToCWebInterfaceServer/Real/GetStationDeviceReals"
+  body:
+    type: json
+    data: |-
+      {
+        "StationCode": "{{station_codes[0]}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.deleteEnvVar("device_codes");
+        if (res.status == 200) {
+          // Extract data from the response body
+          let data = res.getBody();
+
+          // 0 is failure, 1 is success
+          if (data.Code == 1) {
+            const stationCodes = data.Data.DeviceReals.map(device => device.DeviceCode);
+            bru.setVar("device_codes", stationCodes);
+          }
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

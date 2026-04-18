@@ -1,0 +1,47 @@
+opencollection: 1.0.0
+
+info:
+  name: Pion Power Web APIs
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  headers:
+    - name: CompanyCode
+      value: PionPower
+    - name: TimeZone
+      value: America/Toronto
+    - name: token
+      value: "{{access_token}}"
+
+docs:
+  content: |
+    # Pion Power Web APIs
+
+    This collection contains Bruno code for experimenting with the Pion Power web APIs
+
+    Most of this we discovered by using the web UI at https://evcharger.pionpower.ca/PionPowerCustomer/ and watching the control flow in the browser's developer tools.
+
+    To use this, you'll need to create a `.env` file in the folder for this collection. The `.env` file should contain the following:
+
+        user_email=<email address of Pion Power Account>
+        user_password=<password for above account>
+  type: text/markdown
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
+    presets:
+      request:
+        type: http

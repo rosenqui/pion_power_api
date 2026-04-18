@@ -1,0 +1,21 @@
+info:
+  name: Get Realtime Data by Device Code
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{base_url}}/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
+  body:
+    type: json
+    data: |-
+      {
+        "DeviceCode": "{{device_codes[0]}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

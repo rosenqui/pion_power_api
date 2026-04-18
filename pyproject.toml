@@ -1,0 +1,31 @@
+[project]
+name = "pion_power_api"
+version = "0.1.0"
+description = "Async Python client library for the Pion Power HTTP REST API."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+  { name = "rosenqui" }
+]
+dependencies = [
+  "httpx>=0.24.0"
+]
+classifiers = [
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent"
+]
+[project.urls]
+"Source" = "https://github.com/rosenqui/pion_power_api"
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+  "pytest-asyncio>=0.22",
+  "respx>=0.23.0"
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

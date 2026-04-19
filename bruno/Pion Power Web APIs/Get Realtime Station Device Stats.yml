@@ -1,7 +1,7 @@
 info:
   name: Get Realtime Station Device Stats
   type: http
-  seq: 3
+  seq: 6
 
 http:
   method: POST
@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "StationCode": "{{station_codes[0]}}",
-        "SignalIdDic": {
+        "dontUseSignalIdDic": {
           "102": [
             10200000,
             10200001,
@@ -73,8 +73,8 @@ runtime:
 
           // 0 is failure, 1 is success
           if (data.Code == 1) {
-            const stationCodes = data.Data.DeviceReals.map(device => device.DeviceCode);
-            bru.setVar("device_codes", stationCodes);
+            const codes = data.Data.DeviceReals.map(device => device.DeviceCode);
+            bru.setVar("device_codes", codes);
           }
         }
 

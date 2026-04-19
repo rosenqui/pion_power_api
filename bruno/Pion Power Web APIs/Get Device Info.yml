@@ -1,11 +1,11 @@
 info:
-  name: Get Device Statistic Data
+  name: Get Device Info
   type: http
-  seq: 9
+  seq: 4
 
 http:
   method: POST
-  url: "{{base_url}}/StatisticsDataServer/Statistics/GetDeviceStatisticData"
+  url: "{{base_url}}/AppInterfaceServer/Config/GetDeviceInfo"
   body:
     type: json
     data: '{"DeviceCode":"{{device_codes[0]}}"}'

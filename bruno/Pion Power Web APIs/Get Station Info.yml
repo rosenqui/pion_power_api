@@ -1,16 +1,16 @@
 info:
-  name: Get Realtime Data by Device Code
+  name: Get Station Info
   type: http
-  seq: 8
+  seq: 3
 
 http:
   method: POST
-  url: "{{base_url}}/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
+  url: "{{base_url}}/AppInterfaceServer/Config/GetStationInfo"
   body:
     type: json
     data: |-
       {
-        "DeviceCode": "{{device_codes[0]}}"
+        "StationCode": "{{station_codes[0]}}"
       }
   auth: inherit
 

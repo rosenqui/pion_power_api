@@ -62,11 +62,30 @@ async def test_get_realtime_data_by_device_code():
     route = respx.post(
         "https://api.example.com/v1/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
     ).mock(
-        return_value=httpx.Response(200, json={"data": "realtime"})
+        return_value=httpx.Response(
+            200,
+            json={
+                "Code": 1,
+                "Data": {
+                    "signal1": {
+                        "SignalId": "1",
+                        "SignalName": "Power",
+                        "SignalValue": "100",
+                        "SignalMeaning": "Active Power",
+                        "SignalUnit": "W",
+                        "BlockType": "Block1",
+                        "UpdateTime": "2024-01-01 12:00:00",
+                    }
+                },
+            },
+        )
     )
 
     async with PionPowerAPIClient("https://api.example.com/v1") as client:
         result = await client.get_realtime_data_by_device_code("DEV123")
 
-    assert result == {"data": "realtime"}
+    assert isinstance(result, list)
+    assert len(result) == 1
+    assert result[0].signal_id == "1"
+    assert result[0].signal_name == "Power"
     assert route.called

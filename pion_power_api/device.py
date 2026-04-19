@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import typing as t
 
+from .device_data import DeviceData
+from .device_stats import DeviceStats
+
 if t.TYPE_CHECKING:
     from .client import PionPowerAPIClient
 
@@ -24,7 +27,7 @@ class Device:
         product_code: str,
         product_name: str,
         hardware_version: str,
-        soft_version: str,
+        software_version: str,
         upgrade_version: str,
         upgrade_progress: str,
         device_now_time: str,
@@ -41,7 +44,7 @@ class Device:
         self.product_code = product_code
         self.product_name = product_name
         self.hardware_version = hardware_version
-        self.soft_version = soft_version
+        self.software_version = software_version
         self.upgrade_version = upgrade_version
         self.upgrade_progress = upgrade_progress
         self.device_now_time = device_now_time
@@ -60,7 +63,7 @@ class Device:
             f"product_code={self.product_code!r}, "
             f"product_name={self.product_name!r}, "
             f"hardware_version={self.hardware_version!r}, "
-            f"soft_version={self.soft_version!r}, "
+            f"software_version={self.software_version!r}, "
             f"upgrade_version={self.upgrade_version!r}, "
             f"upgrade_progress={self.upgrade_progress!r}, "
             f"device_now_time={self.device_now_time!r})"
@@ -78,21 +81,21 @@ class Device:
             A Device instance populated with data from the dictionary.
         """
         return cls(
-            station_code=data.get("StationCode", ""),
-            device_code=data.get("DeviceCode", ""),
-            device_name=data.get("DeviceName", ""),
-            device_type=data.get("DeviceType", ""),
-            parent_code=data.get("ParentCode", ""),
-            master_or_slave=data.get("MasterOrSlave", ""),
-            device_share_status=data.get("DeviceShareStatus", ""),
-            product_id=data.get("ProductId", ""),
-            product_code=data.get("ProductCode", ""),
-            product_name=data.get("ProductName", ""),
-            hardware_version=data.get("HardwareVersion", ""),
-            soft_version=data.get("SoftVersion", ""),
-            upgrade_version=data.get("UpgradeVersion", ""),
-            upgrade_progress=data.get("UpgradeProgress", ""),
-            device_now_time=data.get("DeviceNowTime", ""),
+            station_code=data.get("StationCode"),
+            device_code=data.get("DeviceCode"),
+            device_name=data.get("DeviceName"),
+            device_type=data.get("DeviceType"),
+            parent_code=data.get("ParentCode"),
+            master_or_slave=data.get("MasterOrSlave"),
+            device_share_status=data.get("DeviceShareStatus"),
+            product_id=data.get("ProductId"),
+            product_code=data.get("ProductCode"),
+            product_name=data.get("ProductName"),
+            hardware_version=data.get("HardwareVersion"),
+            software_version=data.get("SoftwareVersion") or data.get("SoftVersion"),
+            upgrade_version=data.get("UpgradeVersion"),
+            upgrade_progress=data.get("UpgradeProgress"),
+            device_now_time=data.get("DeviceNowTime"),
             client=client,
         )
 
@@ -114,19 +117,30 @@ class Device:
             "ProductCode": self.product_code,
             "ProductName": self.product_name,
             "HardwareVersion": self.hardware_version,
-            "SoftVersion": self.soft_version,
+            "SoftwareVersion": self.software_version,
             "UpgradeVersion": self.upgrade_version,
             "UpgradeProgress": self.upgrade_progress,
             "DeviceNowTime": self.device_now_time,
         }
 
-    async def GetRealtimeData(self) -> t.Any:
+    async def GetRealtimeData(self) -> list[DeviceData]:
         """Get real-time data for this device.
 
         Calls the client's get_realtime_data_by_device_code method
         with this device's code.
 
         Returns:
-            The parsed JSON response as a Python dictionary.
+            A list of DeviceData objects containing real-time signal data.
         """
         return await self.client.get_realtime_data_by_device_code(self.device_code)
+
+    async def GetStats(self) -> DeviceStats:
+        """Get statistic data for this device.
+
+        Calls the client's get_device_stats method
+        with this device's code.
+
+        Returns:
+            A DeviceStats object containing device statistics data.
+        """
+        return await self.client.get_device_stats(self.device_code)

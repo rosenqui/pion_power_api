@@ -1,29 +1,32 @@
 info:
-  name: Get Station List
+  name: Get Device List
   type: http
-  seq: 2
+  seq: 4
 
 http:
   method: POST
-  url: "{{base_url}}/AppInterfaceServer/Config/GetStationList"
+  url: "{{base_url}}/AppInterfaceServer/Config/GetDeviceList"
   body:
     type: json
-    data: "{}"
+    data: |-
+      {
+        "StationCode": "{{station_codes[0]}}"
+      }
   auth: inherit
 
 runtime:
   scripts:
     - type: after-response
       code: |-
-        bru.deleteEnvVar("station_codes");
+        bru.deleteEnvVar("device_codes");
         if (res.status == 200) {
           // Extract data from the response body
           let data = res.getBody();
 
           // 0 is failure, 1 is success
           if (data.Code == 1) {
-            const codes = data.Data.map(station => station.StationCode);
-            bru.setVar("station_codes", codes);
+            const codes = data.Data.map(device => device.DeviceCode);
+            bru.setVar("device_codes", codes);
           }
         }
 

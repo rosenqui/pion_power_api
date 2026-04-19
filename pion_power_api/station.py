@@ -58,13 +58,13 @@ class Station:
             A Station instance populated with data from the dictionary.
         """
         return cls(
-            station_code=data.get("StationCode", ""),
-            station_name=data.get("StationName", ""),
-            station_type=data.get("StationType", ""),
-            country=data.get("Country", ""),
-            province=data.get("Province", ""),
-            city=data.get("City", ""),
-            area=data.get("Area", ""),
+            station_code=data.get("StationCode"),
+            station_name=data.get("StationName"),
+            station_type=data.get("StationType"),
+            country=data.get("Country"),
+            province=data.get("Province"),
+            city=data.get("City"),
+            area=data.get("Area"),
             client=client,
         )
 

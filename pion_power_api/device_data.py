@@ -48,13 +48,13 @@ class DeviceData:
             A DeviceData instance populated with data from the dictionary.
         """
         return cls(
-            signal_id=data.get("SignalId", ""),
-            signal_name=data.get("SignalName", ""),
-            signal_value=data.get("SignalValue", ""),
-            signal_meaning=data.get("SignalMeaning", ""),
-            signal_unit=data.get("SignalUnit", ""),
-            block_type=data.get("BlockType", ""),
-            update_time=data.get("UpdateTime", ""),
+            signal_id=data.get("SignalId"),
+            signal_name=data.get("SignalName"),
+            signal_value=data.get("SignalValue"),
+            signal_meaning=data.get("SignalMeaning"),
+            signal_unit=data.get("SignalUnit"),
+            block_type=data.get("BlockType"),
+            update_time=data.get("UpdateTime"),
         )
 
     def to_dict(self) -> dict[str, t.Any]:

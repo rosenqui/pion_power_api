@@ -8,6 +8,7 @@ import httpx
 import typing as t
 
 from .device import Device
+from .device_stats import DeviceStats
 from .exceptions import APIError
 from .device_data import DeviceData
 from .station import Station
@@ -29,6 +30,16 @@ class PionPowerAPIClient:
         headers: Headers | None = None,
         verify: bool = True,
     ) -> None:
+        """Initialize the Pion Power API client.
+
+        Args:
+            base_url: The base URL of the Pion Power API server.
+            username: Optional username for authentication.
+            password: Optional password for authentication.
+            timeout: Request timeout in seconds. Defaults to 10.0.
+            headers: Optional dictionary of additional HTTP headers.
+            verify: Whether to verify SSL certificates. Defaults to True.
+        """
         self.base_url = base_url.rstrip("/")
         self.username = username
         self.password = password
@@ -115,18 +126,60 @@ class PionPowerAPIClient:
         self._client.headers["token"] = token
         return True
 
-    async def get_realtime_data_by_device_code(self, device_code: str) -> list[DeviceData]:
-        """Fetch real-time device data by device code.
-
-        Sends a POST request to "/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
-        with the device code included in the JSON body. The response body is
-        validated as JSON and returned as a Python dictionary.
+    async def get_device(self, device_code: str) -> Device:
+        """Fetch a device by its code.
 
         Args:
             device_code: The code of the device to query.
 
         Returns:
-            The parsed JSON response as a Python dictionary.
+            A Device object containing device information.
+
+        Raises:
+            APIError: When the response is not valid JSON or the request fails.
+        """
+        response = await self.__post("/AppInterfaceServer/Config/GetDeviceInfo", json={"DeviceCode": device_code})
+        if not isinstance(response, dict):
+            raise APIError("Response is not valid JSON.")
+        if (response["Code"] != 1) or (not isinstance(response["Data"], dict)):
+            raise APIError(f"API call failed: {response["Msg"]}")
+        return Device.from_dict(response["Data"], self)
+
+    async def get_device_stats(self, device_code: str) -> DeviceStats:
+        """Fetch real-time device stats by device code.
+
+        Sends a POST request to "/StatisticsDataServer/Statistics/GetDeviceStatisticData"
+        with the device code included in the JSON body. The response body is
+        validated as JSON and parsed into DeviceStats objects.
+
+        Args:
+            device_code: The code of the device to query.
+
+        Returns:
+            A DeviceStats object containing device statistics data.
+
+        Raises:
+            APIError: When the response is not valid JSON or the request fails.
+        """
+        response = await self.__post("/StatisticsDataServer/Statistics/GetDeviceStatisticData", json={"DeviceCode": device_code})
+        if not isinstance(response, dict):
+            raise APIError("Response is not valid JSON.")
+        if (response["Code"] != 1) or (not isinstance(response["Data"], dict)):
+            raise APIError(f"API call failed: {response["Msg"]}")
+        return DeviceStats.from_dict(response["Data"])
+
+    async def get_realtime_data_by_device_code(self, device_code: str) -> list[DeviceData]:
+        """Fetch real-time device data by device code.
+
+        Sends a POST request to "/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
+        with the device code included in the JSON body. The response body is
+        validated as JSON and parsed into DeviceData objects.
+
+        Args:
+            device_code: The code of the device to query.
+
+        Returns:
+            A list of DeviceData objects containing real-time signal data.
 
         Raises:
             APIError: When the response is not valid JSON or the request fails.
@@ -139,6 +192,20 @@ class PionPowerAPIClient:
         return [DeviceData.from_dict(device) for device in response["Data"].values() if isinstance(device, dict)]
 
     async def get_realtime_station_device_data(self, station_code: str) -> list[Device]:
+        """Fetch all devices for a station with their real-time data.
+
+        Sends a POST request to "/ToCWebInterfaceServer/Real/GetStationDeviceReals"
+        with the station code to retrieve device information and real-time status.
+
+        Args:
+            station_code: The code of the station to query.
+
+        Returns:
+            A list of Device objects for the station.
+
+        Raises:
+            APIError: When the response is not valid JSON or the request fails.
+        """
         response = await self.__post("/ToCWebInterfaceServer/Real/GetStationDeviceReals", json={"StationCode": station_code})
         if not isinstance(response, dict):
             raise APIError("Response is not valid JSON.")
@@ -147,6 +214,17 @@ class PionPowerAPIClient:
         return [Device.from_dict(device, self) for device in response["Data"]["DeviceReals"] if isinstance(device, dict)]
 
     async def get_station_list(self) -> list[Station]:
+        """Fetch the list of all stations.
+
+        Sends a POST request to "/AppInterfaceServer/Config/GetStationList"
+        to retrieve all stations the authenticated user has access to.
+
+        Returns:
+            A list of Station objects.
+
+        Raises:
+            APIError: When the response is not valid JSON or the request fails.
+        """
         response = await self.__post("/AppInterfaceServer/Config/GetStationList", json={})
         if not isinstance(response, dict):
             raise APIError("Response is not valid JSON.")

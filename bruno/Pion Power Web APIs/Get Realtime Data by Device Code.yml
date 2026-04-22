@@ -1,7 +1,7 @@
 info:
   name: Get Realtime Data by Device Code
   type: http
-  seq: 8
+  seq: 9
 
 http:
   method: POST

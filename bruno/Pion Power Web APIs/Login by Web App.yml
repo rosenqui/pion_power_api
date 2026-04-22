@@ -1,0 +1,54 @@
+info:
+  name: Login by Web App
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/ToCWebInterfaceServer/Auth/UserLogin"
+  body:
+    type: json
+    data: |-
+      {
+        "UserLoginId": "{{process.env.user_email}}",
+        "PassWord": "{{user_password_hash}}",
+        "LoginType": 2
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        if (bru.getProcessEnv("user_email") == null) {
+          throw("You need to set a value for user_email in your .env file.");
+        }
+
+        const CryptoJS = require('crypto-js');
+        const pw = bru.getProcessEnv("user_password");
+
+        if (pw == null) {
+          throw("You need to set a value for user_password in your .env file.");
+        }
+        // MD5 hash the password
+        const hash = CryptoJS.MD5(pw).toString();
+
+        bru.setVar("user_password_hash", hash);
+    - type: after-response
+      code: |-
+        bru.deleteEnvVar("access_token");
+        if (res.status == 200) {
+          // Extract data from the response body
+          let data = res.getBody();
+
+          // 0 is failure, 1 is success
+          if (data.Code == 1) {
+            bru.setVar("access_token", data.Data.Token);
+          }
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

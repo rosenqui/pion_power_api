@@ -1,18 +1,18 @@
 info:
-  name: Login
+  name: Login by Mobile App
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
-  url: "{{base_url}}/ToCWebInterfaceServer/Auth/UserLogin"
+  url: "{{base_url}}/APPInterfaceServer/Auth/UserLogin"
   body:
     type: json
     data: |-
       {
         "UserLoginId": "{{process.env.user_email}}",
         "PassWord": "{{user_password_hash}}",
-        "LoginType": 2
+        //"LoginType": 2
       }
   auth: inherit
 
@@ -52,3 +52,19 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  As with the web login, this invalidates other sessions using this type of login. The mobile app displays "Login Expired" and you need to sign in again.
+
+  The mobile app sends the following data:
+
+  ```JSON
+  {
+    "UserLoginId": "user@example.com",
+    "PassWord":"<md5-hash-of-utf8-password>",
+    "OSType":1,
+    "APPVersion":"2.1.11",
+    "PhoneBrand":"google",
+    "APPID":"170976fa8bd16daca45"
+  }
+  ```

@@ -1,5 +1,8 @@
 """Pion Power API async client package."""
 
+__version__ = "2026.4.22"
+__author__ = "Eric Rosenquist"
+
 from .client import PionPowerAPIClient
 from .exceptions import APIError
 from .station import Station

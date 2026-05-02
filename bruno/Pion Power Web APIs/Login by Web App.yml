@@ -52,3 +52,72 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Successful login
+    request:
+      url: "{{base_url}}/ToCWebInterfaceServer/Auth/UserLogin"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "UserLoginId": "{{process.env.user_email}}",
+            "PassWord": "{{user_password_hash}}",
+            "LoginType": 2
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Sat, 02 May 2026 22:20:38 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": {
+              "LoginType": 2,
+              "Token": "<base64>",
+              "CompanyType": 0,
+              "CompanyCode": "PionPower",
+              "GenerateTime": "2026-05-03 06:20:38",
+              "EffectiveMinites": 0.0,
+              "LastVisitTime": "2026-05-03 06:20:38",
+              "Language": "en-us",
+              "Id": 0,
+              "UserId": null,
+              "UserLoginId": "user@example.com",
+              "UserName": "Example User",
+              "LoginPassword": null,
+              "Salt": null,
+              "TelePhone": null,
+              "Email": "user@example.com",
+              "EmailStatus": 0,
+              "APPID": null,
+              "RoleId": "12345678901234567890123456789012",
+              "IsDelete": 0,
+              "UserStatus": 0,
+              "AccountTime": "0001-01-01 00:00:00",
+              "PasswordTime": "0001-01-01 00:00:00",
+              "HeadAddress": "05CustomerPicture/DefaultHead.png",
+              "UserRegisterTime": "2026-04-17 13:54:22",
+              "ReserveA": null,
+              "ReserveB": null,
+              "AddUserId": null,
+              "AddUserName": null,
+              "UpdateTime": "0001-01-01 00:00:00"
+            }
+          }

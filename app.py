@@ -40,6 +40,8 @@ async def main() -> None:
             print("Attempting to login...")
             if await client.login():
                 print("Login successful!")
+                print("Company code:", client.company_code)
+                print("Company type:", client.company_type)
             else:
                 print("Login failed.")
                 sys.exit(1)

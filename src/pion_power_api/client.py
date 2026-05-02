@@ -62,7 +62,11 @@ class PionPowerAPIClient:
         self.password = password
         self.token: str | None = None
         self.timeout = timeout
+
         self.is_logged_in = False
+        self.company_code = "PionPower"
+        self.company_type = 0
+        self.language = "en-us"
 
         default_headers: Headers = {
             "Accept": "application/json",
@@ -159,6 +163,11 @@ class PionPowerAPIClient:
         self.token = token
         self._client.headers["token"] = token
         self.is_logged_in = True
+        self.company_code = (
+            response.get("CompanyCode", "PionPower") if isinstance(response.get("CompanyCode"), str) else "PionPower"
+        )
+        self.company_type = response.get("CompanyType", 0) if isinstance(response.get("CompanyType"), int) else 0
+        self.language = response.get("Language", "en-us") if isinstance(response.get("Language"), str) else "en-us"
         return True
 
     async def get_device(self, device_code: str) -> Device:

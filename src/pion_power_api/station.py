@@ -4,18 +4,15 @@ from __future__ import annotations
 
 import typing as t
 
-from pion_power_api.exceptions import APIError
-
-from .device import Device
-
 if t.TYPE_CHECKING:
     from .client import PionPowerAPIClient
+    from .device import Device
 
 
 class Station:
     """Represents a Pion Power station with location and type information."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         station_code: str,
         station_name: str,
@@ -26,6 +23,7 @@ class Station:
         area: str,
         client: PionPowerAPIClient,
     ) -> None:
+        """Initialize the Station instance."""
         self.station_code = station_code
         self.station_name = station_name
         self.station_type = station_type
@@ -36,6 +34,13 @@ class Station:
         self.client = client
 
     def __repr__(self) -> str:
+        """
+        Return a string representation of the Station instance.
+
+        Returns:
+            String representation of the Station instance.
+
+        """
         return (
             f"Station(station_code={self.station_code!r}, "
             f"station_name={self.station_name!r}, "
@@ -48,7 +53,8 @@ class Station:
 
     @classmethod
     def from_dict(cls, data: dict[str, t.Any], client: PionPowerAPIClient) -> Station:
-        """Create a Station instance from a dictionary.
+        """
+        Create a Station instance from a dictionary.
 
         Args:
             data: Dictionary containing station data.
@@ -56,23 +62,26 @@ class Station:
 
         Returns:
             A Station instance populated with data from the dictionary.
+
         """
         return cls(
-            station_code=data.get("StationCode"),
-            station_name=data.get("StationName"),
-            station_type=data.get("StationType"),
-            country=data.get("Country"),
-            province=data.get("Province"),
-            city=data.get("City"),
-            area=data.get("Area"),
+            station_code=str(data.get("StationCode")),
+            station_name=str(data.get("StationName")),
+            station_type=str(data.get("StationType")),
+            country=str(data.get("Country")),
+            province=str(data.get("Province")),
+            city=str(data.get("City")),
+            area=str(data.get("Area")),
             client=client,
         )
 
     def to_dict(self) -> dict[str, t.Any]:
-        """Convert the Station instance to a dictionary.
+        """
+        Convert the Station instance to a dictionary.
 
         Returns:
             Dictionary representation of the station.
+
         """
         return {
             "StationCode": self.station_code,
@@ -84,13 +93,12 @@ class Station:
             "Area": self.area,
         }
 
-    async def GetDevices(self) -> list[Device]:
-        """Get devices for this station.
-
-        Calls the client's get_realtime_station_device_data method
-        with this station's code.
+    async def get_devices(self) -> list[Device]:
+        """
+        Fetch devices associated with this station.
 
         Returns:
-            The parsed JSON response as a Python dictionary.
+            A list of Device objects associated with this station.
+
         """
-        return await self.client.get_realtime_station_device_data(self.station_code)
+        return await self.client.get_device_list(self.station_code)

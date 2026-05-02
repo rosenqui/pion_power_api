@@ -1,7 +1,7 @@
 info:
   name: Get Device List
   type: http
-  seq: 6
+  seq: 5
 
 http:
   method: POST
@@ -35,3 +35,78 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Device List
+    request:
+      url: "{{base_url}}/AppInterfaceServer/Config/GetDeviceList"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "StationCode": "{{station_codes[0]}}"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Sat, 02 May 2026 19:00:30 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": [
+              {
+                "MaximumCurrent": 32.0,
+                "SoftwareVersion": "2.1.5",
+                "HardwareVersion": "1.0.5",
+                "LastVersion": null,
+                "RunStatus": 2,
+                "RunStatusName": "Idle",
+                "GunStatus": 1,
+                "GunStatusName": "Plug-in",
+                "PlugAndChargeEn": false,
+                "ChargeCurrent": 0,
+                "DeviceNowTime": "2026-05-02 15:00:30",
+                "OnLineStatus": 1,
+                "OnLineStatusName": "Online",
+                "DeviceShareStatus": 2,
+                "ProductCode": "55-2",
+                "ProductName": "EFAC32NA11-BLE",
+                "Picture": "06ProductPicture/eaa2bd8c925b4af59800bf1395f152aa.png",
+                "Id": 0,
+                "DeviceId": "EFAC32NA11-12345678901234",
+                "DeviceName": "EV Charger",
+                "DeviceType": 901,
+                "DeviceTypeName": "EV Charger",
+                "DeviceCode": "EFAC32NA11-12345678901234",
+                "StationCode": "123456789012345678",
+                "ParentCode": null,
+                "SupplierCode": "0000",
+                "InstallerCode": null,
+                "ProductId": "d5b7aa1a-57d0-4873-bca3-50404fa273c7",
+                "TimeDifference": -240,
+                "TimeDifferenceType": 1,
+                "ReserveA": "America/New_York",
+                "ReserveB": "共享桩",
+                "RatedPower": 0.0,
+                "Capacity": 0.0,
+                "RegisterTime": "2026-04-16 16:39:47",
+                "UpdateTime": "2026-04-16 12:39:54"
+              }
+            ]
+          }

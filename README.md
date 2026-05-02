@@ -67,5 +67,5 @@ Fetches real-time data for a device from `/APPInterfaceServer/RealData/GetRealDa
 - Async HTTP methods: `get`, `post`, `put`, `patch`, `delete`
 - Automatic authentication with username/password
 - JSON request and response handling
-- Custom error handling with `APIError`
+- Custom error handling with `PionApiError`
 - Context manager support for automatic cleanup

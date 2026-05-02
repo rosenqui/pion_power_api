@@ -18,6 +18,7 @@ class DeviceData:
         block_type: str,
         update_time: str,
     ) -> None:
+        """Initialize the DeviceData instance."""
         self.signal_id = signal_id
         self.signal_name = signal_name
         self.signal_value = signal_value
@@ -27,6 +28,7 @@ class DeviceData:
         self.update_time = update_time
 
     def __repr__(self) -> str:
+        """Return a string representation of the DeviceData instance."""
         return (
             f"DeviceData(signal_id={self.signal_id!r}, "
             f"signal_name={self.signal_name!r}, "
@@ -39,29 +41,33 @@ class DeviceData:
 
     @classmethod
     def from_dict(cls, data: dict[str, t.Any]) -> DeviceData:
-        """Create a DeviceData instance from a dictionary.
+        """
+        Create a DeviceData instance from a dictionary.
 
         Args:
             data: Dictionary containing device data.
 
         Returns:
             A DeviceData instance populated with data from the dictionary.
+
         """
         return cls(
-            signal_id=data.get("SignalId"),
-            signal_name=data.get("SignalName"),
-            signal_value=data.get("SignalValue"),
-            signal_meaning=data.get("SignalMeaning"),
-            signal_unit=data.get("SignalUnit"),
-            block_type=data.get("BlockType"),
-            update_time=data.get("UpdateTime"),
+            signal_id=str(data.get("SignalId")),
+            signal_name=str(data.get("SignalName")),
+            signal_value=str(data.get("SignalValue")),
+            signal_meaning=str(data.get("SignalMeaning")),
+            signal_unit=str(data.get("SignalUnit")),
+            block_type=str(data.get("BlockType")),
+            update_time=str(data.get("UpdateTime")),
         )
 
     def to_dict(self) -> dict[str, t.Any]:
-        """Convert the DeviceData instance to a dictionary.
+        """
+        Convert the DeviceData instance to a dictionary.
 
         Returns:
             Dictionary representation of the device data.
+
         """
         return {
             "SignalId": self.signal_id,

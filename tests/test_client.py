@@ -2,7 +2,7 @@ import httpx
 import pytest
 import respx
 
-from pion_power_api import APIError, PionPowerAPIClient
+from pion_power_api import PionApiError, PionPowerAPIClient
 
 
 @respx.mock
@@ -25,7 +25,7 @@ async def test_login_sets_authorization_header_and_token():
     login_route = respx.post(
         "https://api.example.com/v1/ToCWebInterfaceServer/Auth/UserLogin"
     ).mock(
-        return_value=httpx.Response(200, json={"Data": {"Token": "abc123"}})
+        return_value=httpx.Response(200, json={"Code": 1, "Data": {"Token": "abc123"}})
     )
 
     async with PionPowerAPIClient(
@@ -49,7 +49,7 @@ async def test_request_raises_api_error_for_bad_status():
     )
 
     async with PionPowerAPIClient("https://api.example.com/v1") as client:
-        with pytest.raises(APIError) as exc_info:
+        with pytest.raises(PionApiError) as exc_info:
             await client._PionPowerAPIClient__get("/status")
 
     assert exc_info.value.status_code == 404

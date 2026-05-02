@@ -20,3 +20,349 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: While charging
+    request:
+      url: "{{base_url}}/ToCWebInterfaceServer/Statistic/GetStationHomeStatData"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "NowTime": "{{$isoTimestamp}}", // Browser sends just YYYY-MM-DD. API doesn't seem to use it
+            "StationCode": "{{station_codes[0]}}"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Sat, 25 Apr 2026 19:00:38 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": {
+              "DayStat": {
+                "PVDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Charge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Discharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Efficiency": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "%"
+                },
+                "StationUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridOut": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVOrderNumber": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": ""
+                },
+                "EVChargeHours": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "h"
+                },
+                "Profit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "ESProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "PVProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                }
+              },
+              "MonthStat": {
+                "PVDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Charge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Discharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Efficiency": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "%"
+                },
+                "StationUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridOut": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVOrderNumber": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": ""
+                },
+                "EVChargeHours": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "h"
+                },
+                "Profit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "ESProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "PVProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                }
+              },
+              "YearStat": {
+                "PVDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Charge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Discharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Efficiency": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "%"
+                },
+                "StationUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridOut": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVOrderNumber": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": ""
+                },
+                "EVChargeHours": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "h"
+                },
+                "Profit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "ESProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "PVProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                }
+              },
+              "TotalStat": {
+                "PVDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Charge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Discharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "MoveDischarge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "Efficiency": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "%"
+                },
+                "StationUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridUse": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "GridOut": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVCharge": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "kWh"
+                },
+                "EVOrderNumber": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": ""
+                },
+                "EVChargeHours": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "h"
+                },
+                "Profit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "ESProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                },
+                "PVProfit": {
+                  "Value": 0.0,
+                  "Percent": 0.0,
+                  "Unit": "$"
+                }
+              }
+            }
+          }

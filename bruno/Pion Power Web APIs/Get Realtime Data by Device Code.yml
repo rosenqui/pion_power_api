@@ -19,3 +19,274 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: While charging
+    request:
+      url: "{{base_url}}/APPInterfaceServer/RealData/GetRealDataByDeviceCode"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "DeviceCode": "{{device_codes[0]}}"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Sat, 25 Apr 2026 19:02:23 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": {
+              "90100000": {
+                "SignalId": 90100000,
+                "SignalName": "Communication status",
+                "SignalValue": 1.0,
+                "SignalMeaning": "Online",
+                "SignalUnit": "",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100002": {
+                "SignalId": 90100002,
+                "SignalName": "Gun plugin status",
+                "SignalValue": 1.0,
+                "SignalMeaning": "Plug-in",
+                "SignalUnit": "",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100006": {
+                "SignalId": 90100006,
+                "SignalName": "Run Status",
+                "SignalValue": 4.0,
+                "SignalMeaning": "Charging",
+                "SignalUnit": "",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100007": {
+                "SignalId": 90100007,
+                "SignalName": "Fault code",
+                "SignalValue": 0.0,
+                "SignalMeaning": "Normal",
+                "SignalUnit": "",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100009": {
+                "SignalId": 90100009,
+                "SignalName": "Reason for stopping charging",
+                "SignalValue": 144.0,
+                "SignalMeaning": "Pulling out charger",
+                "SignalUnit": "",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100200": {
+                "SignalId": 90100200,
+                "SignalName": "Leakage current",
+                "SignalValue": 1.7,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100204": {
+                "SignalId": 90100204,
+                "SignalName": "Max current",
+                "SignalValue": 32.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100205": {
+                "SignalId": 90100205,
+                "SignalName": "Set current",
+                "SignalValue": 32.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100206": {
+                "SignalId": 90100206,
+                "SignalName": "Current",
+                "SignalValue": 30.3,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100207": {
+                "SignalId": 90100207,
+                "SignalName": "PWM duty cycle",
+                "SignalValue": 534.4,
+                "SignalMeaning": null,
+                "SignalUnit": "%",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100208": {
+                "SignalId": 90100208,
+                "SignalName": "CP voltage",
+                "SignalValue": 5.9,
+                "SignalMeaning": null,
+                "SignalUnit": "V",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100209": {
+                "SignalId": 90100209,
+                "SignalName": "This time charged duration",
+                "SignalValue": 29.0,
+                "SignalMeaning": null,
+                "SignalUnit": "min",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100210": {
+                "SignalId": 90100210,
+                "SignalName": "Plug temperature",
+                "SignalValue": 27.0,
+                "SignalMeaning": null,
+                "SignalUnit": "℃",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100211": {
+                "SignalId": 90100211,
+                "SignalName": "Male Connector temperature",
+                "SignalValue": 34.0,
+                "SignalMeaning": null,
+                "SignalUnit": "℃",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100214": {
+                "SignalId": 90100214,
+                "SignalName": "CT_Ia",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100215": {
+                "SignalId": 90100215,
+                "SignalName": "CT_Ib",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100216": {
+                "SignalId": 90100216,
+                "SignalName": "CT_Ic",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100300": {
+                "SignalId": 90100300,
+                "SignalName": "Voltage",
+                "SignalValue": 250.3,
+                "SignalMeaning": null,
+                "SignalUnit": "V",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100301": {
+                "SignalId": 90100301,
+                "SignalName": "Voltage B",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "V",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100302": {
+                "SignalId": 90100302,
+                "SignalName": "Voltage C",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "V",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100303": {
+                "SignalId": 90100303,
+                "SignalName": "Current",
+                "SignalValue": 30.3,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100304": {
+                "SignalId": 90100304,
+                "SignalName": "Current B",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100305": {
+                "SignalId": 90100305,
+                "SignalName": "Current C",
+                "SignalValue": 0.0,
+                "SignalMeaning": null,
+                "SignalUnit": "A",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100306": {
+                "SignalId": 90100306,
+                "SignalName": "Power",
+                "SignalValue": 7.6,
+                "SignalMeaning": null,
+                "SignalUnit": "kW",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100217": {
+                "SignalId": 90100217,
+                "SignalName": "This time charged elec",
+                "SignalValue": 3.6,
+                "SignalMeaning": null,
+                "SignalUnit": "kWh",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              },
+              "90100201": {
+                "SignalId": 90100201,
+                "SignalName": "Start charging time",
+                "SignalValue": 0.0,
+                "SignalMeaning": "2026-04-25 14:32:45",
+                "SignalUnit": "",
+                "BlockType": 0,
+                "UpdateTime": "2026-04-25 15:01:52"
+              }
+            }
+          }

@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "StationCode": "{{station_codes[0]}}",
-        "dontUseSignalIdDic": {
+        "SignalIdDic": {
           "102": [
             10200000,
             10200001,
@@ -83,3 +83,220 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Station Device Data
+    request:
+      url: "{{base_url}}/ToCWebInterfaceServer/Real/GetStationDeviceReals"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "StationCode": "{{station_codes[0]}}",
+            "SignalIdDic": {
+              "102": [
+                10200000,
+                10200001,
+                10200002,
+                10200003,
+                10200006,
+                10210000,
+                10220000,
+                10230000
+              ],
+              "201": [
+                20100000,
+                20100109,
+                20100207,
+                20100213,
+                20100201,
+                20100003
+              ],
+              "202": [
+                20200000,
+                20200008,
+                20200003,
+                20200004,
+                20200009
+              ],
+              "301": [
+                30100000,
+                30100109,
+                30100502,
+                30100126,
+                30100507,
+                30100504,
+                30100510,
+                30100513,
+                30100003
+              ],
+              "901": [
+                90100000,
+                90100002,
+                90100006,
+                90100306,
+                90100206,
+                90100300,
+                90100209,
+                90100217
+              ]
+            }
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Sat, 02 May 2026 19:55:52 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": {
+              "DeviceReals": [
+                {
+                  "DeviceCode": "EFAC32NA11-12345678901234",
+                  "DeviceName": "EV Charger",
+                  "DeviceType": 901,
+                  "ParentCode": null,
+                  "MasterOrSlave": -1,
+                  "DeviceShareStatus": 2,
+                  "ProductId": "d5b7aa1a-57d0-4873-bca3-50404fa273c7",
+                  "ProductCode": "55-2",
+                  "ProductName": "EFAC32NA11-BLE",
+                  "HardwareVersion": "1.0.5",
+                  "SoftVersion": "2.1.5",
+                  "UpgradeVersion": null,
+                  "UpgradeProgress": null,
+                  "DeviceNowTime": "2026-05-02 15:55:52",
+                  "RealDatas": {
+                    "90100000": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100000,
+                      "SignalName": "Communication status",
+                      "SignalType": 2,
+                      "SignalValue": 1.0,
+                      "SignalMeaning": "Online",
+                      "SignalUnit": "",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100002": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100002,
+                      "SignalName": "Gun plugin status",
+                      "SignalType": 2,
+                      "SignalValue": 1.0,
+                      "SignalMeaning": "Plug-in",
+                      "SignalUnit": "",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100006": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100006,
+                      "SignalName": "Run Status",
+                      "SignalType": 2,
+                      "SignalValue": 2.0,
+                      "SignalMeaning": "Idle",
+                      "SignalUnit": "",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100306": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100306,
+                      "SignalName": "Power",
+                      "SignalType": 1,
+                      "SignalValue": 7.5,
+                      "SignalMeaning": null,
+                      "SignalUnit": "kW",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100206": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100206,
+                      "SignalName": "Current",
+                      "SignalType": 1,
+                      "SignalValue": 0.0,
+                      "SignalMeaning": null,
+                      "SignalUnit": "A",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100300": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100300,
+                      "SignalName": "Voltage",
+                      "SignalType": 1,
+                      "SignalValue": 251.8,
+                      "SignalMeaning": null,
+                      "SignalUnit": "V",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100209": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100209,
+                      "SignalName": "This time charged duration",
+                      "SignalType": 1,
+                      "SignalValue": 15.0,
+                      "SignalMeaning": null,
+                      "SignalUnit": "min",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    },
+                    "90100217": {
+                      "DeviceCode": "EFAC32NA11-12345678901234",
+                      "DeviceName": "EV Charger",
+                      "DeviceType": 901,
+                      "DeviceTypeName": "充电桩",
+                      "SignalId": 90100217,
+                      "SignalName": "This time charged elec",
+                      "SignalType": 1,
+                      "SignalValue": 1.9,
+                      "SignalMeaning": null,
+                      "SignalUnit": "kWh",
+                      "BlockType": 0,
+                      "UpdateTime": "2026-05-02 15:55:50"
+                    }
+                  }
+                }
+              ]
+            }
+          }

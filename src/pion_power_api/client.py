@@ -291,7 +291,7 @@ class PionPowerAPIClient:
         if not isinstance(response, dict):
             self.is_logged_in = False
             raise PionInvalidJsonError(response=response)
-        if response["Code"] == -1 and response["Msg"] == "Token已过期":
+        if response["Code"] == -1 and response["Msg"] == "<<<Token已过期>>>":
             self.is_logged_in = False
             raise PionAuthError(response=response)
         if response["Code"] != 1 or not isinstance(response["Data"], data_type):

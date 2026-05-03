@@ -39,6 +39,35 @@ class DeviceData:
             f"update_time={self.update_time!r})"
         )
 
+    def __eq__(self, other: object) -> bool:
+        """Compare two DeviceData instances for equality, ignoring update_time."""
+        if self is other:
+            return True
+        if not isinstance(other, DeviceData):
+            return False
+        return (
+            self.signal_id == other.signal_id
+            and self.signal_name == other.signal_name
+            and self.signal_value == other.signal_value
+            and self.signal_meaning == other.signal_meaning
+            and self.signal_unit == other.signal_unit
+            and self.block_type == other.block_type
+        )
+
+    def __hash__(self) -> int:
+        """Return a hash based on the device data."""
+        return hash(
+            (
+                self.signal_id,
+                self.signal_name,
+                self.signal_value,
+                self.signal_meaning,
+                self.signal_unit,
+                self.block_type,
+                self.update_time,
+            )
+        )
+
     @classmethod
     def from_dict(cls, data: dict[str, t.Any]) -> DeviceData:
         """

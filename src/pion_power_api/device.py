@@ -29,7 +29,6 @@ class Device:
         software_version: str,
         upgrade_version: str,
         upgrade_progress: str,
-        device_now_time: str,
         client: PionPowerAPIClient,
     ) -> None:
         """Initialize the Device instance."""
@@ -47,7 +46,6 @@ class Device:
         self.software_version = software_version
         self.upgrade_version = upgrade_version
         self.upgrade_progress = upgrade_progress
-        self.device_now_time = device_now_time
         self.client = client
 
     def __repr__(self) -> str:
@@ -67,7 +65,50 @@ class Device:
             f"software_version={self.software_version!r}, "
             f"upgrade_version={self.upgrade_version!r}, "
             f"upgrade_progress={self.upgrade_progress!r}, "
-            f"device_now_time={self.device_now_time!r})"
+        )
+
+    def __eq__(self, other: object) -> bool:
+        """Compare two Device instances for equality."""
+        if self is other:
+            return True
+        if not isinstance(other, Device):
+            return False
+        return (
+            self.station_code == other.station_code
+            and self.device_code == other.device_code
+            and self.device_name == other.device_name
+            and self.device_type == other.device_type
+            and self.parent_code == other.parent_code
+            and self.master_or_slave == other.master_or_slave
+            and self.device_share_status == other.device_share_status
+            and self.product_id == other.product_id
+            and self.product_code == other.product_code
+            and self.product_name == other.product_name
+            and self.hardware_version == other.hardware_version
+            and self.software_version == other.software_version
+            and self.upgrade_version == other.upgrade_version
+            and self.upgrade_progress == other.upgrade_progress
+        )
+
+    def __hash__(self) -> int:
+        """Return a hash based on the device identity and data."""
+        return hash(
+            (
+                self.station_code,
+                self.device_code,
+                self.device_name,
+                self.device_type,
+                self.parent_code,
+                self.master_or_slave,
+                self.device_share_status,
+                self.product_id,
+                self.product_code,
+                self.product_name,
+                self.hardware_version,
+                self.software_version,
+                self.upgrade_version,
+                self.upgrade_progress,
+            )
         )
 
     @classmethod
@@ -98,7 +139,6 @@ class Device:
             software_version=str(data.get("SoftwareVersion")) or str(data.get("SoftVersion")),
             upgrade_version=str(data.get("UpgradeVersion")),
             upgrade_progress=str(data.get("UpgradeProgress")),
-            device_now_time=str(data.get("DeviceNowTime")),
             client=client,
         )
 
@@ -125,7 +165,6 @@ class Device:
             "SoftwareVersion": self.software_version,
             "UpgradeVersion": self.upgrade_version,
             "UpgradeProgress": self.upgrade_progress,
-            "DeviceNowTime": self.device_now_time,
         }
 
     async def get_realtime_data(self) -> dict[str, DeviceData]:

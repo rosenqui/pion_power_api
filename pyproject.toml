@@ -1,6 +1,6 @@
 [project]
 name = "pion_power_api"
-version = "2026.5.2"
+dynamic = ["version"]
 description = "Async Python client library for the Pion Power HTTP REST API."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -15,6 +15,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Operating System :: OS Independent"
 ]
+
 [project.urls]
 "Source" = "https://github.com/rosenqui/pion_power_api"
 
@@ -28,3 +29,6 @@ test = [
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "pion_power_api.__version__"}

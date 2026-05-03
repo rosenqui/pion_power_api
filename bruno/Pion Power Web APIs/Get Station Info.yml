@@ -19,3 +19,86 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Sample station info
+    request:
+      url: "{{base_url}}/AppInterfaceServer/Config/GetStationInfo"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "StationCode": "{{station_codes[0]}}"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Sat, 02 May 2026 23:28:28 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": {
+              "AuthType": 1,
+              "AIEnable": -1,
+              "AIIncrease": null,
+              "TouTemplateId": null,
+              "TouTemplateName": null,
+              "StationNowTime": "2026-05-02 23:28:28",
+              "GridUsePriceId": null,
+              "GridUsePriceName": null,
+              "AIDisclaimerImgPath": "",
+              "DIYDisclaimerImgPath": "",
+              "WorkModeSupplierType": 0,
+              "WorkModeName": "",
+              "AdvancedWorkModeName": "",
+              "Id": 5624,
+              "StationId": "12345678901234567890123456789012",
+              "StationName": "User-Supplied Station/Home Name",
+              "StationType": 4,
+              "StationCode": "123456789012345678",
+              "StationStatus": 3,
+              "Power": 0.0,
+              "Capacity": 0.0,
+              "PVInstalledPower": 0.0,
+              "Country": "",
+              "Province": "",
+              "City": "",
+              "Area": "",
+              "AreaId": 0,
+              "Address": "",
+              "PostCode": null,
+              "Longitude": 0.0,
+              "Latitude": 0.0,
+              "Introduce": null,
+              "Picture": null,
+              "TimeDifference": null,
+              "Timezone": null,
+              "CompanyCode": "PionPower",
+              "InstallerCode": null,
+              "BackupSOC": 30,
+              "HesAIEnable": false,
+              "PlatformModeEn": false,
+              "ReserveA": null,
+              "ReserveB": null,
+              "CreateTime": "2026-04-17 21:54:22",
+              "UpdateTime": "2026-04-17 21:54:22",
+              "CreateUserId": "user@example.com",
+              "CreateUserName": "user@example.com"
+            }
+          }

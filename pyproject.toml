@@ -32,3 +32,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
 version = {attr = "pion_power_api.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["test_data*"]

@@ -123,10 +123,7 @@ class PionPowerAPIClient:
         """
         Authenticate with the username and password supplied as constructor arguments or updated on the instance.
 
-        This method sends the user's credentials to the
-        "/ToCWebInterfaceServer/Auth/UserLogin" endpoint. The password is sent
-        as an MD5 hash in lowercase hexadecimal form. On success, the returned
-        JSON response is parsed and the `Data.Token` value is saved to
+        On success, the returned JSON response is parsed and the `Data.Token` value is saved to
         `self.token` and added to the client headers for subsequent requests.
 
         Returns:
@@ -134,7 +131,9 @@ class PionPowerAPIClient:
 
         Raises:
             ValueError: When username or password is missing.
-            PionApiError: When the login request fails or the response is invalid.
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionLoginError: When login fails due to invalid credentials.
+            PionApiError: When the HTTP request fails or the response does not contain the expected token.
 
         """
         if not self.username or not self.password:
@@ -190,7 +189,10 @@ class PionPowerAPIClient:
             A Device object containing device information.
 
         Raises:
-            PionApiError: When the response is not valid JSON or the request fails.
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionAuthError: When authentication has expired.
+            PionUnexpectedResponseError: When the response format is unexpected
+            PionApiError: When the HTTP request fails
 
         """
         if self.test_mode_data and "get_device" in self.test_mode_data:
@@ -209,10 +211,13 @@ class PionPowerAPIClient:
             station_code: The code of the station to query.
 
         Returns:
-            A list of DeviceData objects containing device information.
+            A list of Device objects containing device information.
 
         Raises:
-            PionApiError: When the response is not valid JSON or the request fails.
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionAuthError: When authentication has expired.
+            PionUnexpectedResponseError: When the response format is unexpected.
+            PionApiError: When the HTTP request fails.
 
         """
         if self.test_mode_data and "get_device_list" in self.test_mode_data:
@@ -227,9 +232,7 @@ class PionPowerAPIClient:
         """
         Fetch real-time device stats by device code.
 
-        Sends a POST request to "/StatisticsDataServer/Statistics/GetDeviceStatisticData"
-        with the device code included in the JSON body. The response body is
-        validated as JSON and parsed into DeviceStats objects.
+        The response body is validated as JSON and parsed into DeviceStats objects.
 
         Args:
             device_code: The code of the device to query.
@@ -238,7 +241,10 @@ class PionPowerAPIClient:
             A DeviceStats object containing device statistics data.
 
         Raises:
-            PionApiError: When the response is not valid JSON or the request fails.
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionAuthError: When authentication has expired.
+            PionUnexpectedResponseError: When the response format is unexpected
+            PionApiError: When the HTTP request fails
 
         """
         if self.test_mode_data and "get_device_stats" in self.test_mode_data:
@@ -262,7 +268,10 @@ class PionPowerAPIClient:
             A dictionary mapping signal IDs to DeviceData objects containing real-time signal data.
 
         Raises:
-            PionApiError: When the response is not valid JSON or the request fails.
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionAuthError: When authentication has expired.
+            PionUnexpectedResponseError: When the response format is unexpected
+            PionApiError: When the HTTP request fails
 
         """
         if self.test_mode_data and "get_realtime_data_by_device_code" in self.test_mode_data:
@@ -279,14 +288,14 @@ class PionPowerAPIClient:
         """
         Fetch the list of all stations.
 
-        Sends a POST request to "/AppInterfaceServer/Config/GetStationList"
-        to retrieve all stations the authenticated user has access to.
-
         Returns:
             A list of Station objects.
 
         Raises:
-            PionApiError: When the response is not valid JSON or the request fails.
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionAuthError: When authentication has expired.
+            PionUnexpectedResponseError: When the response format is unexpected
+            PionApiError: When the HTTP request fails
 
         """
         if self.test_mode_data and "get_station_list" in self.test_mode_data:

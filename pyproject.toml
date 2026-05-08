@@ -17,7 +17,8 @@ classifiers = [
 ]
 
 [project.urls]
-"Source" = "https://github.com/rosenqui/pion_power_api"
+Source = "https://github.com/rosenqui/pion_power_api"
+Issues = "https://github.com/rosenqui/pion_power_api/issues"
 
 [project.optional-dependencies]
 test = [

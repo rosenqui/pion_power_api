@@ -535,3 +535,100 @@ async def test_get_station_list_not_a_list():
     ) as client:
         with pytest.raises(PionUnexpectedResponseError):
             await client.get_station_list()
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_set_control_data_success():
+    """Test successful set_control_data call."""
+    route = respx.post(
+        "https://api.example.com/v1/ControlDataServer/ControlData/SetControlData"
+    ).mock(
+        return_value=httpx.Response(
+            200, json={"Code": 1, "Msg": "Success", "Data": True}
+        )
+    )
+
+    async with PionPowerAPIClient(
+        "https://api.example.com/v1", "user@example.com", "password"
+    ) as client:
+        result = await client.set_control_data("DEV123", "90100205", 1, 16)
+
+    assert result is True
+    assert route.called
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_set_control_data_with_signal():
+    """Test set_control_data with optional signal dictionary."""
+    route = respx.post(
+        "https://api.example.com/v1/ControlDataServer/ControlData/SetControlData"
+    ).mock(
+        return_value=httpx.Response(
+            200, json={"Code": 1, "Msg": "Success", "Data": True}
+        )
+    )
+
+    async with PionPowerAPIClient(
+        "https://api.example.com/v1", "user@example.com", "password"
+    ) as client:
+        result = await client.set_control_data(
+            "DEV123", "90100205", 1, 16, signal={"SignalName": "Set current"}
+        )
+
+    assert result is True
+    assert route.called
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_set_control_data_api_error():
+    """Test set_control_data when API returns an error code."""
+    respx.post(
+        "https://api.example.com/v1/ControlDataServer/ControlData/SetControlData"
+    ).mock(
+        return_value=httpx.Response(
+            200, json={"Code": 0, "Msg": "Operation failed", "Data": {}}
+        )
+    )
+
+    async with PionPowerAPIClient(
+        "https://api.example.com/v1", "user@example.com", "password"
+    ) as client:
+        with pytest.raises(
+            PionUnexpectedResponseError,
+            match="Unexpected response received: Operation failed",
+        ):
+            await client.set_control_data("DEV123", "90100205", 1, 16)
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_set_control_data_auth_expired():
+    """Test set_control_data when authentication has expired."""
+    respx.post(
+        "https://api.example.com/v1/ControlDataServer/ControlData/SetControlData"
+    ).mock(
+        return_value=httpx.Response(
+            200, json={"Code": -1, "Msg": "<<<Token已过期>>>", "Data": {}}
+        )
+    )
+
+    async with PionPowerAPIClient(
+        "https://api.example.com/v1", "user@example.com", "password"
+    ) as client:
+        with pytest.raises(PionAuthError):
+            await client.set_control_data("DEV123", "90100205", 1, 16)
+
+
+@pytest.mark.asyncio
+async def test_set_control_data_test_mode():
+    """Test set_control_data using internal test mode data."""
+    # Username 'one_device@example.com' triggers test mode using 'one_device' data set in test_data.py
+    async with PionPowerAPIClient(
+        "https://api.example.com/v1", "one_device@example.com", "password"
+    ) as client:
+        result = await client.set_control_data("anything", "anything", 0, 0)
+
+    assert result is True

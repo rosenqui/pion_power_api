@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import logging
 import typing as t
 
@@ -305,6 +306,46 @@ class PionPowerAPIClient:
             response = await self.__post("/AppInterfaceServer/Config/GetStationList", json={})
         data = self.__raise_on_error(response, list)
         return [Station.from_dict(station, self) for station in data if isinstance(station, dict)]
+
+    async def set_control_data(
+        self, device_code: str, signal_id: str, control_level: int, signal_value: int, signal: JSON | None = None
+    ) -> bool:
+        """
+        Set control data for a specific device and signal.
+
+        Args:
+            device_code: The code of the device to update.
+            signal_id: The ID of the signal to update.
+            control_level: The control level for the signal.
+            signal_value: The new value for the signal.
+            signal: An object that gets encoded as JSON and sent in the request body.
+              This can be used to include additional signal information if required by the API.
+              The exact structure of this object depends on the API's requirements and may need to include fields such as signal name, timestamp, or other metadata. If the API does not require additional information beyond the device code, signal ID, control level, and signal value, this parameter can be set to None or an empty dictionary.
+
+        Returns:
+            True if the update was successful, False otherwise.
+
+        Raises:
+            PionInvalidJsonError: When the response is not valid JSON.
+            PionAuthError: When authentication has expired.
+            PionUnexpectedResponseError: When the response format is unexpected
+            PionApiError: When the HTTP request fails
+
+        """
+        if self.test_mode_data and "set_control_data" in self.test_mode_data:
+            _LOGGER.debug("Using test mode set_control_data response.")
+            response = self.test_mode_data["set_control_data"]
+        else:
+            body = {
+                "deviceCode": device_code,
+                "controlValueType": 1,
+                "signalId": signal_id,
+                "controlLevel": control_level,
+                "signalValue": signal_value,
+                "signalString": json.dumps(signal) if signal is not None else None,
+            }
+            response = await self.__post("/ControlDataServer/ControlData/SetControlData", json=body)
+        return self.__raise_on_error(response, bool)
 
     async def __get(
         self,

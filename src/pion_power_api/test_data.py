@@ -438,6 +438,13 @@ __station_two: dict[str, t.Any] = {
     "Area": "",
 }
 
+__success_response: dict[str, t.Any] = {
+    "Code": 1,
+    "Msg": "Success",
+    "Data": True,
+}
+
+
 one_device: dict[str, dict[str, t.Any]] = {
     "login": {
         "Code": 1,
@@ -469,6 +476,7 @@ one_device: dict[str, dict[str, t.Any]] = {
         "Msg": "Success",
         "Data": [__station_one],
     },
+    "set_control_data": __success_response,
 }
 
 two_devices: dict[str, dict[str, t.Any]] = {
@@ -502,6 +510,7 @@ two_devices: dict[str, dict[str, t.Any]] = {
         "Msg": "Success",
         "Data": [__station_one],
     },
+    "set_control_data": __success_response,
 }
 
 two_stations: dict[str, dict[str, t.Any]] = {
@@ -535,4 +544,5 @@ two_stations: dict[str, dict[str, t.Any]] = {
         "Msg": "Success",
         "Data": [__station_one, __station_two],
     },
+    "set_control_data": __success_response,
 }

@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import typing as t
+from datetime import datetime
+
+from .control_signal import ControlSignal
 
 if t.TYPE_CHECKING:
     from .client import PionPowerAPIClient
@@ -192,3 +195,40 @@ class Device:
 
         """
         return await self.client.get_device_stats(self.device_code)
+
+    async def charging_control(self, *charge: bool, power_watts: int, current: int, duration_hours: int) -> bool:
+        """
+        Send a charging control command to the device.
+
+        Args:
+            charge: True to start charging, False to stop.
+            power_watts: The desired charging power in Watts.
+            current: The desired charging current in Amperes.
+            duration_hours: The duration of the charging operation in hours.
+
+        Returns:
+            True if the control command was successful, False otherwise.
+
+        """
+        current_time = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S")
+        if charge:
+            signal_value = 0
+            signal = ControlSignal(
+                pile_sn=self.device_code,
+                start_time=current_time,
+                duration=duration_hours,
+                current=current,
+                power=power_watts,
+                status=signal_value,
+            )
+        else:
+            signal_value = 1
+            signal = ControlSignal(
+                pile_sn=self.device_code,
+                start_time=current_time,
+                duration=0,  # Not used if we're stopping charge
+                current=0,  # Not used if we're stopping charge
+                power=0,  # Not used if we're stopping charge
+                status=signal_value,
+            )
+        return await self.client.set_control_data(self.device_code, "90100404", 1, signal_value, signal)

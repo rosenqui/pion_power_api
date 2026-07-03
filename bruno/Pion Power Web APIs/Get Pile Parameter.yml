@@ -1,0 +1,104 @@
+info:
+  name: Get Pile Parameter
+  type: http
+  seq: 11
+
+http:
+  method: POST
+  url: "{{base_url}}/ToCWebInterfaceServer/Config/GetPileParameter"
+  body:
+    type: json
+    data: '{"DeviceCode":"{{device_codes[0]}}"}'
+  auth: inherit
+
+runtime:
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res('Data.MaximumCurrent')
+        method: jsonq
+      variable:
+        name: PileParamMaximumCurrent
+        scope: runtime
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: res('Data.ChargeCurrent')
+        method: jsonq
+      variable:
+        name: PileParamChargeCurrent
+        scope: runtime
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Sample pile parameter
+    request:
+      url: "{{base_url}}/ToCWebInterfaceServer/Config/GetPileParameter"
+      method: POST
+      body:
+        type: json
+        data: '{"DeviceCode":"{{device_codes[0]}}"}'
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: server
+          value: nginx/1.21.5
+        - name: date
+          value: Fri, 05 Jun 2026 16:00:25 GMT
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: transfer-encoding
+          value: chunked
+        - name: connection
+          value: keep-alive
+        - name: vary
+          value: Accept-Encoding
+      body:
+        type: json
+        data: |-
+          {
+            "Code": 1,
+            "Msg": "Success",
+            "Data": {
+              "PileSn": "EFAC32NA11-12345678901234",
+              "ReserveA": "FF",
+              "ReserveB": "FF",
+              "ReserveC": "FF",
+              "Specifications": "02",
+              "HardwareVersion": "1.0.5",
+              "SoftwareVersion": "2.2.0",
+              "ProducedDate": "2020-07-16 20:20:20",
+              "WifiName": "Network SSID",
+              "WifiPwd": "",
+              "CtEn": 0,
+              "UvEn": 0,
+              "AeEn": 0,
+              "LEn": 0,
+              "PotEn": 0,
+              "TempUnit": 0,
+              "AppLocked": 255,
+              "StopChargingStrategyEn": 255,
+              "PeCheckEn": 0,
+              "NsToLocalEn": 1,
+              "CtLimitElectricity": 0,
+              "ElectricitySetting": -1,
+              "OverCurrentValue": 0,
+              "LeakageValue": -1,
+              "PlugOverTemp": -1,
+              "MaleOverTemp": 3157,
+              "ShellOverTemp": 6160,
+              "GunOverTemp": 10272,
+              "MaximumCurrent": 32,
+              "PlugAndChargeEn": false,
+              "ChargeCurrent": 6,
+              "UpdateTime": "2026-06-05 00:05:15",
+              "Valid": true
+            }
+          }

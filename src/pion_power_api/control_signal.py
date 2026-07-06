@@ -52,16 +52,15 @@ class ControlSignal:
             Dictionary representation of the control signal with PascalCase keys.
 
         """
-        # The API expects string for StartTime and numeric for Power.
-        # Use empty string for missing StartTime and 0 for missing Power.
-        return {
+        values = {
             "PileSn": self.pile_sn,
-            "StartTime": self.start_time or "",
-            "Duration": self.duration or 0,
-            "Current": self.current or 0.0,
-            "Power": self.power if self.power is not None else 0,
+            "StartTime": self.start_time,
+            "Duration": self.duration,
+            "Current": self.current,
+            "Power": self.power,
             "Status": self.status,
         }
+        return {key: value for key, value in values.items() if value is not None}
 
     @classmethod
     def from_dict(cls, data: dict[str, t.Any]) -> ControlSignal:

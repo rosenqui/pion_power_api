@@ -620,6 +620,22 @@ async def test_set_control_data_with_control_signal():
     assert payload["controlSend"][0]["signalString"] == json.dumps(signal.to_dict())
 
 
+def test_control_signal_to_dict_omits_none_values() -> None:
+    signal = ControlSignal(
+        pile_sn="DEV123",
+        status=0,
+        duration=None,
+        current=None,
+        power=None,
+        start_time=None,
+    )
+
+    assert signal.to_dict() == {
+        "PileSn": "DEV123",
+        "Status": 0,
+    }
+
+
 @respx.mock
 @pytest.mark.asyncio
 async def test_set_control_data_api_error():

@@ -617,7 +617,7 @@ async def test_set_control_data_with_control_signal():
 
     request = route.calls[0].request
     payload = json.loads(request.content.decode())
-    assert payload["signalString"] == json.dumps(signal.to_dict())
+    assert payload["controlSend"][0]["signalString"] == json.dumps(signal.to_dict())
 
 
 @respx.mock

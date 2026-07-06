@@ -58,7 +58,7 @@ class PionPowerAPIClient:
             base_url: The base URL of the Pion Power API server.
             username: Optional username for authentication.
             password: Optional password for authentication.
-            httpx_client: Optional custom httpx.AsyncClient instance. If not provided, a default client will be created.
+            httpx_client: Optional custom httpx.AsyncClient instance. If not provided, a default client will be created. This should not be a shared client instance - this library changes the client's state.
             timeout: Request timeout in seconds. Defaults to 30.0.
             headers: Optional dictionary of additional HTTP headers.
 
@@ -100,19 +100,17 @@ class PionPowerAPIClient:
             default_headers.update(headers)
 
         async def log_request(request: httpx.Request) -> None:
-            _LOGGER.debug("Request: %s %s", request.method, request.url)
+            if _LOGGER.isEnabledFor(logging.DEBUG):
+                _LOGGER.debug("Request: %s %s", request.method, request.url)
+                _LOGGER.debug("Request body: %s", request.content.decode() if request.content else None)
 
         if httpx_client is None:
-            httpx_client = httpx.AsyncClient(
-                base_url=self.base_url,
-                event_hooks={"request": [log_request]},
-                headers=default_headers,
-                timeout=self.timeout,
-            )
-        else:
-            httpx_client.base_url = self.base_url
-            httpx_client.headers.update(default_headers)
-            httpx_client.timeout = self.timeout
+            httpx_client = httpx.AsyncClient()
+
+        httpx_client.base_url = self.base_url
+        httpx_client.event_hooks.setdefault("request", []).append(log_request)
+        httpx_client.headers.update(default_headers)
+        httpx_client.timeout = self.timeout
 
         self._client = httpx_client
 
@@ -339,12 +337,16 @@ class PionPowerAPIClient:
             signal_payload = signal.to_dict() if signal is not None and hasattr(signal, "to_dict") else signal
 
             body = {
-                "deviceCode": device_code,
-                "controlValueType": 1,
-                "signalId": signal_id,
-                "controlLevel": control_level,
-                "signalValue": signal_value,
-                "signalString": json.dumps(signal_payload) if signal_payload is not None else None,
+                "controlSend": [
+                    {
+                        "deviceCode": device_code,
+                        "controlValueType": 1,
+                        "signalId": signal_id,
+                        "controlLevel": control_level,
+                        "signalValue": signal_value,
+                        "signalString": json.dumps(signal_payload) if signal_payload is not None else None,
+                    }
+                ]
             }
             response = await self.__post("/ControlDataServer/ControlData/SetControlData", json=body)
         return self.__raise_on_error(response, bool)

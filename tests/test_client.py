@@ -1,3 +1,5 @@
+import json
+
 import httpx
 import pytest
 import respx
@@ -10,6 +12,7 @@ from pion_power_api import (
     PionPowerAPIClient,
     PionUnexpectedResponseError,
 )
+from pion_power_api.control_signal import ControlSignal
 
 
 @respx.mock
@@ -579,6 +582,42 @@ async def test_set_control_data_with_signal():
 
     assert result is True
     assert route.called
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_set_control_data_with_control_signal():
+    """Test set_control_data with a ControlSignal object."""
+    route = respx.post(
+        "https://api.example.com/v1/ControlDataServer/ControlData/SetControlData"
+    ).mock(
+        return_value=httpx.Response(
+            200, json={"Code": 1, "Msg": "Success", "Data": True}
+        )
+    )
+
+    signal = ControlSignal(
+        pile_sn="DEV123",
+        start_time="2026-07-06 12:34:56",
+        duration=2,
+        current=16.0,
+        power=2500.0,
+        status=0,
+    )
+
+    async with PionPowerAPIClient(
+        "https://api.example.com/v1", "user@example.com", "password"
+    ) as client:
+        result = await client.set_control_data(
+            "DEV123", "90100205", 1, 16, signal=signal
+        )
+
+    assert result is True
+    assert route.called
+
+    request = route.calls[0].request
+    payload = json.loads(request.content.decode())
+    assert payload["signalString"] == json.dumps(signal.to_dict())
 
 
 @respx.mock

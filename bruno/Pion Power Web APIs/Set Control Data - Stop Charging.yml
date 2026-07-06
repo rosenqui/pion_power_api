@@ -17,7 +17,7 @@ http:
             "signalId": "90100404",
             "controlLevel": 1,
             "signalValue": 1,
-            "signalString": "{\"PileSn\":\"{{device_codes[0]}}\",\"StartTime\":\"{{formattedTimestamp}}\",\"Duration\":0,\"Current\":0,\"Power\":0,\"Status\":1}"
+            "signalString": "{\"PileSn\":\"{{device_codes[0]}}\",\"Status\":1}"
           }
         ]
       }

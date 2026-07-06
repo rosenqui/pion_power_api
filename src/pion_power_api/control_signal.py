@@ -11,30 +11,30 @@ class ControlSignal:
     def __init__(
         self,
         pile_sn: str,
-        start_time: str,
-        duration: int,
-        current: float,
-        power: float,
         status: int,
+        duration: int | None = None,
+        current: float | None = None,
+        power: float | None = None,
+        start_time: str | None = None,
     ) -> None:
         """
         Initialize the ControlSignal instance.
 
         Args:
             pile_sn: The device code (Pile Serial Number).
-            start_time: The scheduled start time (e.g., "YYYY-MM-DD HH:mm:ss").
+            status: The status code for the control signal.
             duration: The duration of the operation in hours.
             current: The charging current in Amperes.
             power: The charging power in Watts.
-            status: The status code for the control signal.
+            start_time: The scheduled start time (e.g., "YYYY-MM-DD HH:mm:ss").
 
         """
         self.pile_sn = pile_sn
-        self.start_time = start_time
+        self.status = status
         self.duration = duration
         self.current = current
         self.power = power
-        self.status = status
+        self.start_time = start_time or None  # Normalize empty string to None for start_time
 
     def __repr__(self) -> str:
         """Return a string representation of the ControlSignal instance."""
@@ -52,12 +52,14 @@ class ControlSignal:
             Dictionary representation of the control signal with PascalCase keys.
 
         """
+        # The API expects string for StartTime and numeric for Power.
+        # Use empty string for missing StartTime and 0 for missing Power.
         return {
             "PileSn": self.pile_sn,
-            "StartTime": self.start_time,
-            "Duration": self.duration,
-            "Current": self.current,
-            "Power": self.power,
+            "StartTime": self.start_time or "",
+            "Duration": self.duration or 0,
+            "Current": self.current or 0.0,
+            "Power": self.power if self.power is not None else 0,
             "Status": self.status,
         }
 
@@ -73,11 +75,24 @@ class ControlSignal:
             A ControlSignal instance.
 
         """
+        raw_power = data.get("Power")
+        # Treat empty string or None as missing (None)
+        if raw_power in (None, ""):
+            power: float | None = None
+        else:
+            try:
+                power = float(raw_power)
+            except TypeError, ValueError:
+                power = None
+
+        raw_start = data.get("StartTime")
+        start_time = str(raw_start) if raw_start not in (None, "") else None
+
         return cls(
             pile_sn=str(data.get("PileSn", "")),
-            start_time=str(data.get("StartTime", "")),
-            duration=int(data.get("Duration", 0)),
-            current=float(data.get("Current", 0.0)),
-            power=float(data.get("Power", 0.0)),
             status=int(data.get("Status", 0)),
+            duration=data.get("Duration"),
+            current=data.get("Current"),
+            power=power,
+            start_time=start_time,
         )

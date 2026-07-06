@@ -336,13 +336,15 @@ class PionPowerAPIClient:
             _LOGGER.debug("Using test mode set_control_data response.")
             response = self.test_mode_data["set_control_data"]
         else:
+            signal_payload = signal.to_dict() if signal is not None and hasattr(signal, "to_dict") else signal
+
             body = {
                 "deviceCode": device_code,
                 "controlValueType": 1,
                 "signalId": signal_id,
                 "controlLevel": control_level,
                 "signalValue": signal_value,
-                "signalString": json.dumps(signal) if signal is not None else None,
+                "signalString": json.dumps(signal_payload) if signal_payload is not None else None,
             }
             response = await self.__post("/ControlDataServer/ControlData/SetControlData", json=body)
         return self.__raise_on_error(response, bool)

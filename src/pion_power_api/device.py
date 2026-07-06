@@ -67,7 +67,7 @@ class Device:
             f"hardware_version={self.hardware_version!r}, "
             f"software_version={self.software_version!r}, "
             f"upgrade_version={self.upgrade_version!r}, "
-            f"upgrade_progress={self.upgrade_progress!r}, "
+            f"upgrade_progress={self.upgrade_progress!r})"
         )
 
     def __eq__(self, other: object) -> bool:
@@ -139,7 +139,7 @@ class Device:
             product_code=str(data.get("ProductCode")),
             product_name=str(data.get("ProductName")),
             hardware_version=str(data.get("HardwareVersion")),
-            software_version=str(data.get("SoftwareVersion")) or str(data.get("SoftVersion")),
+            software_version=str(data.get("SoftwareVersion") or data.get("SoftVersion")),
             upgrade_version=str(data.get("UpgradeVersion")),
             upgrade_progress=str(data.get("UpgradeProgress")),
             client=client,
@@ -196,7 +196,32 @@ class Device:
         """
         return await self.client.get_device_stats(self.device_code)
 
-    async def charging_control(self, *charge: bool, power_watts: int, current: int, duration_hours: int) -> bool:
+    async def start_charging(self, power_watts: int, current: int, duration_hours: int) -> bool:
+        """
+        Start charging the device.
+
+        Args:
+            power_watts: The desired charging power in Watts.
+            current: The desired charging current in Amperes.
+            duration_hours: The duration of the charging operation in hours.
+
+        Returns:
+            True if the charging command was successful, False otherwise.
+
+        """
+        return await self._charging_control(power_watts, current, duration_hours, charge=True)
+
+    async def stop_charging(self) -> bool:
+        """
+        Stop charging the device.
+
+        Returns:
+            True if the stop charging command was successful, False otherwise.
+
+        """
+        return await self._charging_control(0, 0, 0, charge=False)
+
+    async def _charging_control(self, power_watts: int, current: int, duration_hours: int, *, charge: bool) -> bool:
         """
         Send a charging control command to the device.
 

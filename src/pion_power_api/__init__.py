@@ -1,6 +1,6 @@
 """Pion Power API async client package."""
 
-__version__ = "2026.7.3"
+__version__ = "2026.7.6"
 
 from .client import PionPowerAPIClient
 from .device import Device

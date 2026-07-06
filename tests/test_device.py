@@ -151,7 +151,7 @@ async def test_start_charging_sends_control_data():
     client.set_control_data = mock_set_control
     device = make_device(client=client)
 
-    result = await device.start_charging(power_watts=2500, current=16, duration_hours=4)
+    result = await device.start_charging(current=16, duration_hours=4)
 
     assert result is True
     mock_set_control.assert_awaited_once()
@@ -163,11 +163,11 @@ async def test_start_charging_sends_control_data():
 
     signal = args[4]
     assert signal.pile_sn == "DEV001"
-    assert signal.power == 2500
+    assert signal.status == 0
     assert signal.current == 16
     assert signal.duration == 4
-    assert signal.status == 0
-    assert isinstance(signal.start_time, str)
+    assert signal.start_time is None
+    assert signal.power is None
 
 
 @pytest.mark.asyncio
@@ -189,8 +189,8 @@ async def test_stop_charging_sends_stop_control_data():
 
     signal = args[4]
     assert signal.pile_sn == "DEV001"
-    assert signal.power == 0
-    assert signal.current == 0
-    assert signal.duration == 0
     assert signal.status == 1
-    assert isinstance(signal.start_time, str)
+    assert signal.power is None
+    assert signal.current is None
+    assert signal.duration is None
+    assert signal.start_time is None

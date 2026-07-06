@@ -208,7 +208,7 @@ __device_data: dict[str, t.Any] = {
         "SignalName": "Leakage current",
         "SignalValue": 1.7,
         "SignalMeaning": None,
-        "SignalUnit": "A",
+        "SignalUnit": "mA",
         "BlockType": 0,
         "UpdateTime": "2026-04-25 15:01:52",
     },
